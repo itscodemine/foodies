@@ -10,8 +10,11 @@ class OrderSuccessScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.check_circle_outline,
-                color: Colors.green, size: 100),
+            const Icon(
+              Icons.check_circle_outline,
+              color: Colors.green,
+              size: 100,
+            ),
             const SizedBox(height: 20),
             const Text(
               'Order Placed Successfully!',
@@ -25,14 +28,14 @@ class OrderSuccessScreen extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context)
-                    .popUntil((route) => route.isFirst);
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              child: const Text(
+                'Back to Home',
+                style: TextStyle(color: Colors.white),
               ),
-              child: const Text('Back to Home'),
-            )
+            ),
           ],
         ),
       ),

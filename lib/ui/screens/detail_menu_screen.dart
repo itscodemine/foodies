@@ -160,9 +160,7 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: _reviews.length,
-                      padding: const EdgeInsets.only(
-                        top: 10.0,
-                      ), // Padding between title and first review
+                      padding: const EdgeInsets.only(top: 10.0),
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 8.0),
                       itemBuilder: (context, index) {
@@ -170,7 +168,7 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
                         return ReviewCard(review: review);
                       },
                     ),
-                ], // This brace was missing for the inner Column
+                ],
               ),
             ),
           ],
@@ -231,7 +229,10 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text('Add to Cart', style: TextStyle(fontSize: 16)),
+              child: const Text(
+                'Add to Cart',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
             ),
           ],
         ),

@@ -289,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   SizedBox(
-                    height: 240,
+                    height: 200,
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       scrollDirection: Axis.horizontal,
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         final menu = _popularMenus[index];
                         return SizedBox(
-                          width: 160,
+                          width: 140,
                           child: MenuCard(menu: menu),
                         );
                       },

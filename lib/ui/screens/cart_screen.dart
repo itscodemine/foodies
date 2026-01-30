@@ -30,7 +30,12 @@ class _CartScreenState extends State<CartScreen> {
               itemBuilder: (context, index) {
                 final item = _cartService.items[index];
                 return ListTile(
-                  leading: Image.network(item.menu.imageUrl, width: 50, height: 50, fit: BoxFit.cover,),
+                  leading: Image.network(
+                    item.menu.imageUrl,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
                   title: Text(item.menu.name),
                   subtitle: Text('\$${item.menu.price.toStringAsFixed(2)}'),
                   trailing: Row(
@@ -40,7 +45,10 @@ class _CartScreenState extends State<CartScreen> {
                         icon: const Icon(Icons.remove),
                         onPressed: () {
                           setState(() {
-                            _cartService.updateQuantity(item, item.quantity - 1);
+                            _cartService.updateQuantity(
+                              item,
+                              item.quantity - 1,
+                            );
                           });
                         },
                       ),
@@ -49,7 +57,10 @@ class _CartScreenState extends State<CartScreen> {
                         icon: const Icon(Icons.add),
                         onPressed: () {
                           setState(() {
-                            _cartService.updateQuantity(item, item.quantity + 1);
+                            _cartService.updateQuantity(
+                              item,
+                              item.quantity + 1,
+                            );
                           });
                         },
                       ),
@@ -66,8 +77,17 @@ class _CartScreenState extends State<CartScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Subtotal:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('\$${_cartService.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text(
+                  'Subtotal:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '\$${_cartService.subtotal.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -78,7 +98,8 @@ class _CartScreenState extends State<CartScreen> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const OrderDetailScreen()),
+                          builder: (context) => const OrderDetailScreen(),
+                        ),
                       );
                       _updateCart();
                     },
@@ -86,7 +107,7 @@ class _CartScreenState extends State<CartScreen> {
                 backgroundColor: Colors.green,
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: const Text('Checkout'),
+              child: Text('Checkout', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

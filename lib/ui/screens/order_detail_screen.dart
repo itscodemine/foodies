@@ -75,7 +75,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       status: 'processing',
       createdAt: Timestamp.now(),
       items: _cartService.items.map((e) => OrderItem.fromCartItem(e)).toList(),
-      pricing: Pricing(subtotal: subtotal, deliveryFee: deliveryFee, total: total),
+      pricing: Pricing(
+        subtotal: subtotal,
+        deliveryFee: deliveryFee,
+        total: total,
+      ),
       payment: Payment(method: 'Cash', status: 'pending'),
       orderType: _orderType.name,
       deliveryAddress: _selectedAddress,
@@ -105,108 +109,201 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Confirm Order'),
-        backgroundColor: Colors.green,
-      ),
+      appBar: AppBar(title: const Text('Confirm Order')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 20.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Order Type
-                  const Text('Order Type', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  RadioListTile<OrderType>(
-                    title: const Text('Delivery'),
-                    value: OrderType.delivery,
-                    groupValue: _orderType,
-                    onChanged: (value) => setState(() => _orderType = value!),
+                  _buildSectionCard(
+                    title: 'Order Type',
+                    child: Column(
+                      children: [
+                        RadioListTile<OrderType>(
+                          title: const Text('Delivery'),
+                          value: OrderType.delivery,
+                          groupValue: _orderType,
+                          onChanged: (value) =>
+                              setState(() => _orderType = value!),
+                          activeColor: Colors.green,
+                        ),
+                        RadioListTile<OrderType>(
+                          title: const Text('Pickup'),
+                          value: OrderType.pickup,
+                          groupValue: _orderType,
+                          onChanged: (value) =>
+                              setState(() => _orderType = value!),
+                          activeColor: Colors.green,
+                        ),
+                      ],
+                    ),
                   ),
-                  RadioListTile<OrderType>(
-                    title: const Text('Pickup'),
-                    value: OrderType.pickup,
-                    groupValue: _orderType,
-                    onChanged: (value) => setState(() => _orderType = value!),
-                  ),
-
-                  // Delivery Address
+                  const SizedBox(height: 20),
                   if (_orderType == OrderType.delivery) ...[
-                    const SizedBox(height: 16),
-                    const Text('Delivery Address', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    _addresses.isEmpty
-                        ? Center(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddEditAddressScreen()));
-                                if (result == true) _fetchAddresses();
-                              },
-                              child: const Text('Add New Address'),
+                    _buildSectionCard(
+                      title: 'Delivery Address',
+                      child: _addresses.isEmpty
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddEditAddressScreen(),
+                                      ),
+                                    );
+                                    if (result == true) _fetchAddresses();
+                                  },
+                                  child: const Text('Add New Address'),
+                                ),
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
+                              ),
+                              child: DropdownButtonFormField<AddressModel>(
+                                value: _selectedAddress,
+                                items: _addresses.map((address) {
+                                  return DropdownMenuItem(
+                                    value: address,
+                                    child: Text(address.label),
+                                  );
+                                }).toList(),
+                                onChanged: (value) =>
+                                    setState(() => _selectedAddress = value),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
                             ),
-                          )
-                        : DropdownButtonFormField<AddressModel>(
-                            value: _selectedAddress,
-                            items: _addresses.map((address) {
-                              return DropdownMenuItem(
-                                value: address,
-                                child: Text(address.label),
-                              );
-                            }).toList(),
-                            onChanged: (value) => setState(() => _selectedAddress = value),
-                            decoration: const InputDecoration(border: OutlineInputBorder()),
-                          ),
+                    ),
+                    const SizedBox(height: 20),
                   ],
-
-                  // Payment Method
-                  const SizedBox(height: 16),
-                  const Text('Payment Method', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  RadioListTile<PaymentMethod>(
-                    title: const Text('Cash on Delivery'),
-                    value: PaymentMethod.cash,
-                    groupValue: _paymentMethod,
-                    onChanged: (value) => setState(() => _paymentMethod = value!),
+                  _buildSectionCard(
+                    title: 'Payment Method',
+                    child: RadioListTile<PaymentMethod>(
+                      title: const Text('Cash on Delivery'),
+                      value: PaymentMethod.cash,
+                      groupValue: _paymentMethod,
+                      onChanged: (value) =>
+                          setState(() => _paymentMethod = value!),
+                      activeColor: Colors.green,
+                    ),
                   ),
-                  const Divider(height: 32),
-
-                  // Order Summary
-                  const Text('Order Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  ..._cartService.items.map((item) => ListTile(
-                        title: Text('${item.menu.name} (x${item.quantity})'),
-                        trailing: Text('\$${(item.totalPrice).toStringAsFixed(2)}'),
-                      )),
-                  const Divider(),
-                  ListTile(
-                    title: const Text('Subtotal'),
-                    trailing: Text('\$${_cartService.subtotal.toStringAsFixed(2)}'),
-                  ),
-                  ListTile(
-                    title: const Text('Delivery Fee'),
-                    trailing: Text('\$${(_orderType == OrderType.delivery ? _deliveryFee : 0.0).toStringAsFixed(2)}'),
-                  ),
-                  ListTile(
-                    title: const Text('Total', style: TextStyle(fontWeight: FontWeight.bold)),
-                    trailing: Text(
-                      '\$${(_cartService.subtotal + (_orderType == OrderType.delivery ? _deliveryFee : 0.0)).toStringAsFixed(2)}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                  const SizedBox(height: 20),
+                  _buildSectionCard(
+                    title: 'Order Summary',
+                    child: Column(
+                      children: [
+                        ..._cartService.items.map(
+                          (item) => ListTile(
+                            title: Text(
+                              '${item.menu.name} (x${item.quantity})',
+                            ),
+                            trailing: Text(
+                              '\$${(item.totalPrice).toStringAsFixed(2)}',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        ListTile(
+                          title: const Text('Subtotal'),
+                          trailing: Text(
+                            '\$${_cartService.subtotal.toStringAsFixed(2)}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        ListTile(
+                          title: const Text('Delivery Fee'),
+                          trailing: Text(
+                            '\$${(_orderType == OrderType.delivery ? _deliveryFee : 0.0).toStringAsFixed(2)}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        ListTile(
+                          title: const Text(
+                            'Total',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          trailing: Text(
+                            '\$${(_cartService.subtotal + (_orderType == OrderType.delivery ? _deliveryFee : 0.0)).toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-      bottomNavigationBar: Padding(
+      bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 8,
+            ),
+          ],
+        ),
         child: _isPlacingOrder
             ? const Center(child: CircularProgressIndicator())
             : ElevatedButton(
                 onPressed: _placeOrder,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-                  minimumSize: const Size(double.infinity, 50),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-                child: const Text('Place Order'),
+                child: const Text(
+                  'Place Order',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
+      ),
+    );
+  }
+
+  Widget _buildSectionCard({required String title, required Widget child}) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            child,
+          ],
+        ),
       ),
     );
   }
