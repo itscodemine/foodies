@@ -15,39 +15,55 @@ class AddEditAddressScreen extends StatefulWidget {
 class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   final _formKey = GlobalKey<FormState>();
   final AddressService _addressService = AddressService();
+  bool _isSaving = false;
 
-  late String _recipient;
-  late String _phone;
-  late String _city;
-  late String _postalCode;
-  late String _fullAddress;
-  late String _label;
+  late TextEditingController _recipientController;
+  late TextEditingController _phoneController;
+  late TextEditingController _cityController;
+  late TextEditingController _postalCodeController;
+  late TextEditingController _fullAddressController;
+  late TextEditingController _labelController;
 
   @override
   void initState() {
     super.initState();
-    _recipient = widget.address?.recipient ?? '';
-    _phone = widget.address?.phone ?? '';
-    _city = widget.address?.city ?? '';
-    _postalCode = widget.address?.postalCode ?? '';
-    _fullAddress = widget.address?.fullAddress ?? '';
-    _label = widget.address?.label ?? '';
+    _recipientController = TextEditingController(text: widget.address?.recipient);
+    _phoneController = TextEditingController(text: widget.address?.phone);
+    _cityController = TextEditingController(text: widget.address?.city);
+    _postalCodeController =
+        TextEditingController(text: widget.address?.postalCode);
+    _fullAddressController =
+        TextEditingController(text: widget.address?.fullAddress);
+    _labelController = TextEditingController(text: widget.address?.label);
+  }
+
+  @override
+  void dispose() {
+    _recipientController.dispose();
+    _phoneController.dispose();
+    _cityController.dispose();
+    _postalCodeController.dispose();
+    _fullAddressController.dispose();
+    _labelController.dispose();
+    super.dispose();
   }
 
   void _saveAddress() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+      setState(() {
+        _isSaving = true;
+      });
 
       final userId = FirebaseAuth.instance.currentUser!.uid;
       final newAddress = AddressModel(
         id: widget.address?.id,
         userId: userId,
-        recipient: _recipient,
-        phone: _phone,
-        city: _city,
-        postalCode: _postalCode,
-        fullAddress: _fullAddress,
-        label: _label,
+        recipient: _recipientController.text,
+        phone: _phoneController.text,
+        city: _cityController.text,
+        postalCode: _postalCodeController.text,
+        fullAddress: _fullAddressController.text,
+        label: _labelController.text,
       );
 
       if (widget.address == null) {
@@ -55,70 +71,108 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
       } else {
         await _addressService.updateAddress(newAddress);
       }
-      Navigator.pop(context, true);
+
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final inputDecoration = InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.address == null ? 'Add Address' : 'Edit Address'),
-        backgroundColor: Colors.green,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  initialValue: _recipient,
-                  decoration: const InputDecoration(labelText: 'Recipient Name'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a name' : null,
-                  onSaved: (value) => _recipient = value!,
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _labelController,
+                decoration: inputDecoration.copyWith(
+                  labelText: 'Label (e.g., Home, Office)',
+                  prefixIcon: const Icon(Icons.label_outline),
                 ),
-                TextFormField(
-                  initialValue: _phone,
-                  decoration: const InputDecoration(labelText: 'Phone Number'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a phone number' : null,
-                  onSaved: (value) => _phone = value!,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter a label' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _recipientController,
+                decoration: inputDecoration.copyWith(
+                  labelText: 'Recipient Name',
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
-                TextFormField(
-                  initialValue: _fullAddress,
-                  decoration: const InputDecoration(labelText: 'Full Address'),
-                  validator: (value) => value!.isEmpty ? 'Please enter an address' : null,
-                  onSaved: (value) => _fullAddress = value!,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter a name' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _phoneController,
+                decoration: inputDecoration.copyWith(
+                  labelText: 'Phone Number',
+                  prefixIcon: const Icon(Icons.phone_outlined),
                 ),
-                TextFormField(
-                  initialValue: _city,
-                  decoration: const InputDecoration(labelText: 'City'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a city' : null,
-                  onSaved: (value) => _city = value!,
+                keyboardType: TextInputType.phone,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter a phone number' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _fullAddressController,
+                decoration: inputDecoration.copyWith(
+                  labelText: 'Full Address',
+                  prefixIcon: const Icon(Icons.signpost_outlined),
                 ),
-                TextFormField(
-                  initialValue: _postalCode,
-                  decoration: const InputDecoration(labelText: 'Postal Code'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a postal code' : null,
-                  onSaved: (value) => _postalCode = value!,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter an address' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _cityController,
+                decoration: inputDecoration.copyWith(
+                  labelText: 'City',
+                  prefixIcon: const Icon(Icons.location_city_outlined),
                 ),
-                TextFormField(
-                  initialValue: _label,
-                  decoration: const InputDecoration(labelText: 'Label (e.g., Home, Office)'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a label' : null,
-                  onSaved: (value) => _label = value!,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter a city' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _postalCodeController,
+                decoration: inputDecoration.copyWith(
+                  labelText: 'Postal Code',
+                  prefixIcon: const Icon(Icons.markunread_mailbox_outlined),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _saveAddress,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text('Save Address'),
-                ),
-              ],
-            ),
+                keyboardType: TextInputType.number,
+                validator: (value) =>
+                    value!.isEmpty ? 'Please enter a postal code' : null,
+              ),
+              const SizedBox(height: 32),
+              _isSaving
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton.icon(
+                      onPressed: _saveAddress,
+                      icon: const Icon(Icons.save_alt_outlined),
+                      label: const Text('Save Address'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        textStyle: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+            ],
           ),
         ),
       ),
