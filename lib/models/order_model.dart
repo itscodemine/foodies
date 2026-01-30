@@ -25,6 +25,25 @@ class OrderModel {
     this.deliveryAddress,
   });
 
+  factory OrderModel.fromFirestore(String id, Map<String, dynamic> data) {
+    return OrderModel(
+      id: id,
+      userId: data['user_id'],
+      status: data['status'],
+      createdAt: data['created_at'],
+      items: (data['items'] as List)
+          .map((item) => OrderItem.fromFirestore(item))
+          .toList(),
+      pricing: Pricing.fromFirestore(data['pricing']),
+      payment: Payment.fromFirestore(data['payment']),
+      orderType: data['order_type'],
+      deliveryAddress: data['delivery_address'] != null
+          ? AddressModel.fromFirestore(
+              '', data['delivery_address']) // ID is not needed here
+          : null,
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
       'user_id': userId,
@@ -64,6 +83,16 @@ class OrderItem {
     );
   }
 
+  factory OrderItem.fromFirestore(Map<String, dynamic> data) {
+    return OrderItem(
+      menuId: data['menu_id'],
+      name: data['name'],
+      price: (data['price'] as num).toDouble(),
+      imageUrl: data['image_url'],
+      quantity: data['quantity'],
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
       'menu_id': menuId,
@@ -86,6 +115,14 @@ class Pricing {
     required this.total,
   });
 
+  factory Pricing.fromFirestore(Map<String, dynamic> data) {
+    return Pricing(
+      subtotal: (data['subtotal'] as num).toDouble(),
+      deliveryFee: (data['delivery_fee'] as num).toDouble(),
+      total: (data['total'] as num).toDouble(),
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {'subtotal': subtotal, 'delivery_fee': deliveryFee, 'total': total};
   }
@@ -97,7 +134,15 @@ class Payment {
 
   Payment({required this.method, required this.status});
 
+  factory Payment.fromFirestore(Map<String, dynamic> data) {
+    return Payment(
+      method: data['method'],
+      status: data['status'],
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {'method': method, 'status': status};
   }
 }
+
