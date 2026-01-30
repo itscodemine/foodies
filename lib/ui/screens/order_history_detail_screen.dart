@@ -39,109 +39,313 @@ class _OrderHistoryDetailScreenState extends State<OrderHistoryDetailScreen> {
         orderId: widget.order.id!,
       );
     }
-    setState(() {
-      _reviewedStatus = status;
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _reviewedStatus = status;
+        _isLoading = false;
+      });
+    }
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'processing':
+        return Colors.orange;
+      case 'delivered':
+        return Colors.green;
+      case 'cancelled':
+        return Colors.red;
+      case 'completed':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Order Details'),
-        backgroundColor: Colors.green,
-      ),
+      appBar: AppBar(title: const Text('Order Details')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('Order Information'),
-            _buildInfoRow('Order ID:', widget.order.id!),
-            _buildInfoRow('Date:',
-                DateFormat.yMMMd().add_jm().format(widget.order.createdAt.toDate())),
-            _buildInfoRow('Status:', widget.order.status.toUpperCase()),
-            _buildInfoRow(
-                'Total:', '\$${widget.order.pricing.total.toStringAsFixed(2)}'),
-            const Divider(height: 32),
-            _buildSectionTitle('Items'),
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Column(
-                    children: widget.order.items.map((item) {
-                      final bool isReviewed = _reviewedStatus[item.menuId] ?? false;
-                      return ListTile(
-                        leading: Image.network(item.imageUrl,
-                            width: 50, height: 50, fit: BoxFit.cover),
-                        title: Text(item.name),
-                        subtitle: Text('Qty: ${item.quantity}'),
-                        trailing:
-                            (widget.order.status == 'completed')
-                                ? ElevatedButton(
-                                    onPressed: isReviewed
-                                        ? null
-                                        : () async {
-                                            final result =
-                                                await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddReviewScreen(
-                                                  orderItem: item,
-                                                  orderId: widget.order.id!,
-                                                ),
-                                              ),
-                                            );
-                                            if (result == true) {
-                                              _checkReviewedStatus();
-                                            }
-                                          },
-                                    child: Text(isReviewed ? 'Reviewed' : 'Review'),
-                                  )
-                                : null,
-                      );
-                    }).toList(),
-                  ),
-            const Divider(height: 32),
-            _buildSectionTitle('Delivery'),
-            _buildInfoRow('Type:', widget.order.orderType.toUpperCase()),
-            if (widget.order.orderType == 'delivery' &&
-                widget.order.deliveryAddress != null)
-              _buildInfoRow('Address:',
-                  '${widget.order.deliveryAddress!.fullAddress}, ${widget.order.deliveryAddress!.city} ${widget.order.deliveryAddress!.postalCode}'),
-            const Divider(height: 32),
-            _buildSectionTitle('Payment'),
-            _buildInfoRow('Method:', widget.order.payment.method),
-            _buildInfoRow(
-                'Payment Status:', widget.order.payment.status.toUpperCase()),
+            _buildSummaryCard(),
+            const SizedBox(height: 16),
+            _buildItemsCard(),
+            const SizedBox(height: 16),
+            _buildLogisticsCard(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child:
-          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+  Widget _buildSummaryCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.receipt_long, color: Colors.green, size: 28),
+                const SizedBox(width: 12),
+                Text(
+                  'Order Summary',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            _buildInfoRow('Order ID', '#${widget.order.id!.substring(0, 8)}'),
+            const SizedBox(height: 8),
+            _buildInfoRow(
+              'Date',
+              DateFormat(
+                'MMM d, yyyy HH:mm',
+              ).format(widget.order.createdAt.toDate()),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 120,
+                  child: Text(
+                    'Status',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(
+                      widget.order.status,
+                    ).withAlpha((255 * 0.15).round()),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    widget.order.status.toUpperCase(),
+                    style: TextStyle(
+                      color: _getStatusColor(widget.order.status),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            _buildInfoRow(
+              'Total',
+              '\$${widget.order.pricing.total.toStringAsFixed(2)}',
+              isTotal: true,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildItemsCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.list_alt, color: Colors.green, size: 28),
+                const SizedBox(width: 12),
+                Text(
+                  'Items',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            _isLoading
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.order.items.length,
+                    itemBuilder: (context, index) {
+                      final item = widget.order.items[index];
+                      return _buildOrderItem(item);
+                    },
+                    separatorBuilder: (context, index) => const Divider(),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrderItem(OrderItem item) {
+    final bool isReviewed = _reviewedStatus[item.menuId] ?? false;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-              width: 100,
-              child: Text(label,
-                  style: const TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(child: Text(value)),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.network(
+              item.imageUrl,
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Quantity: ${item.quantity}',
+                  style: const TextStyle(color: Colors.black54),
+                ),
+                Text(
+                  'Price: \$${item.price.toStringAsFixed(2)}',
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
+          if (widget.order.status == 'completed')
+            ElevatedButton(
+              onPressed: isReviewed
+                  ? null
+                  : () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddReviewScreen(
+                            orderItem: item,
+                            orderId: widget.order.id!,
+                          ),
+                        ),
+                      );
+                      if (result == true) {
+                        _checkReviewedStatus();
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isReviewed ? Colors.grey : Colors.green,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                textStyle: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              child: Text(
+                isReviewed ? 'REVIEWED' : 'REVIEW',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLogisticsCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.local_shipping, color: Colors.green, size: 28),
+                const SizedBox(width: 12),
+                Text(
+                  'Delivery & Payment',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            _buildInfoRow('Order Type', widget.order.orderType.toUpperCase()),
+            if (widget.order.orderType == 'delivery' &&
+                widget.order.deliveryAddress != null) ...[
+              const SizedBox(height: 8),
+              _buildInfoRow(
+                'Address',
+                '${widget.order.deliveryAddress!.fullAddress}, ${widget.order.deliveryAddress!.city} ${widget.order.deliveryAddress!.postalCode}',
+              ),
+            ],
+            const Divider(height: 24),
+            _buildInfoRow('Payment Method', widget.order.payment.method),
+            const SizedBox(height: 8),
+            _buildInfoRow(
+              'Payment Status',
+              widget.order.payment.status.toUpperCase(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value, {bool isTotal = false}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 140,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: isTotal ? Colors.black : Colors.black54,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              fontSize: isTotal ? 20 : 15,
+              color: isTotal ? Colors.green : Colors.black,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
