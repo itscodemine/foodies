@@ -197,7 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const Icon(Icons.star,
                                             color: Colors.amber, size: 16),
                                         const SizedBox(width: 4),
-                                        Text(menu.averageRating.toString()),
+                                        Text(menu.averageRating
+                                            .toStringAsFixed(1)),
                                       ],
                                     ),
                                   ),
