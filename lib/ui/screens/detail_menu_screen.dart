@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
 import 'package:foodies/models/review_model.dart';
 import 'package:foodies/services/cart_service.dart';
+import 'package:foodies/services/favorite_service.dart';
 import 'package:foodies/services/review_service.dart';
 
 class DetailMenuScreen extends StatefulWidget {
@@ -15,20 +16,41 @@ class DetailMenuScreen extends StatefulWidget {
 
 class _DetailMenuScreenState extends State<DetailMenuScreen> {
   final ReviewService _reviewService = ReviewService();
+  final FavoriteService _favoriteService = FavoriteService();
   List<ReviewModel> _reviews = [];
   bool _isLoadingReviews = true;
+  bool _isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     _fetchReviews();
+    _checkIfFavorite();
   }
 
   void _fetchReviews() async {
     final reviews = await _reviewService.getReviewsForMenu(widget.menu.id);
+    if (mounted) {
+      setState(() {
+        _reviews = reviews;
+        _isLoadingReviews = false;
+      });
+    }
+  }
+
+  void _checkIfFavorite() async {
+    final isFavorite = await _favoriteService.isFavorite(widget.menu.id);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFavorite;
+      });
+    }
+  }
+
+  void _toggleFavorite() async {
+    await _favoriteService.toggleFavorite(widget.menu.id, _isFavorite);
     setState(() {
-      _reviews = reviews;
-      _isLoadingReviews = false;
+      _isFavorite = !_isFavorite;
     });
   }
 
@@ -132,8 +154,8 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
             ),
             const SizedBox(width: 16),
             IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.favorite_border),
+              onPressed: _toggleFavorite,
+              icon: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border),
               iconSize: 32,
               color: Colors.red,
             ),

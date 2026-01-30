@@ -5,6 +5,7 @@ import 'package:foodies/services/menu_services.dart';
 import 'package:foodies/ui/screens/address_screen.dart';
 import 'package:foodies/ui/screens/cart_screen.dart';
 import 'package:foodies/ui/screens/detail_menu_screen.dart';
+import 'package:foodies/ui/screens/favorite_screen.dart';
 import 'package:foodies/ui/screens/login_screen.dart';
 import 'package:foodies/ui/screens/order_history_screen.dart';
 import 'package:foodies/ui/screens/profile_screen.dart';
@@ -71,7 +72,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.favorite),
               title: const Text('Favorites'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FavoriteScreen()),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.person),
