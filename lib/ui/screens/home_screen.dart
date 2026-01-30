@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Dessert',
     'Beverages',
     'Noodles',
-    'Seafood'
+    'Seafood',
   ];
   String _selectedCategory = 'Main Course';
   List<MenuModel> _categoryMenus = [];
@@ -44,8 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchUserData() async {
-    final user =
-        await AuthServices().getUser(FirebaseAuth.instance.currentUser!.uid);
+    final user = await AuthServices().getUser(
+      FirebaseAuth.instance.currentUser!.uid,
+    );
     setState(() {
       _user = user;
     });
@@ -86,9 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     _user!.name,
                     style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ],
               )
@@ -115,9 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             DrawerHeader(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: const BoxDecoration(
-                color: Colors.green,
-              ),
+              decoration: const BoxDecoration(color: Colors.green),
               child: _user != null
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,53 +143,81 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.favorite_border, color: Colors.black),
-              title: const Text('Favorites', style: TextStyle(color: Colors.black)),
+              title: const Text(
+                'Favorites',
+                style: TextStyle(color: Colors.black),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FavoriteScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const FavoriteScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.person_outline, color: Colors.black),
-              title: const Text('Profile', style: TextStyle(color: Colors.black)),
+              title: const Text(
+                'Profile',
+                style: TextStyle(color: Colors.black),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
-              leading: const Icon(Icons.location_on_outlined, color: Colors.black),
-              title: const Text('My Addresses', style: TextStyle(color: Colors.black)),
+              leading: const Icon(
+                Icons.location_on_outlined,
+                color: Colors.black,
+              ),
+              title: const Text(
+                'My Addresses',
+                style: TextStyle(color: Colors.black),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddressScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const AddressScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.history_outlined, color: Colors.black),
-              title: const Text('Order History', style: TextStyle(color: Colors.black)),
+              title: const Text(
+                'Order History',
+                style: TextStyle(color: Colors.black),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const OrderHistoryScreen()),
+                    builder: (context) => const OrderHistoryScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.info_outline, color: Colors.black),
-              title: const Text('About Us', style: TextStyle(color: Colors.black)),
+              title: const Text(
+                'About Us',
+                style: TextStyle(color: Colors.black),
+              ),
               onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.logout_outlined, color: Colors.black),
-              title: const Text('Logout', style: TextStyle(color: Colors.black)),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.black),
+              ),
               onTap: () async {
                 await AuthServices().signOut();
                 Navigator.pushAndRemoveUntil(
@@ -224,12 +252,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         enabled: false,
                         decoration: InputDecoration(
                           hintText: 'Search for menus...',
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.green),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.green,
+                          ),
                           fillColor: Colors.green[50],
                           filled: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0,
+                          ),
                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
                             borderSide: BorderSide(color: Colors.green[100]!),
@@ -250,8 +281,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       'Popular Menus',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12.0),
@@ -275,8 +308,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       'Categories',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12.0),
@@ -291,7 +326,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: ChoiceChip(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                            ),
                             label: Text(
                               category,
                               style: TextStyle(
@@ -316,35 +353,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 12.0),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Menus',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 12.0),
                   _isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : _categoryMenus.isEmpty
-                          ? const Center(
-                              child: Text('No menus in this category'))
-                          : GridView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                      ? const Center(child: Text('No menus in this category'))
+                      : GridView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 childAspectRatio: 0.8,
                               ),
-                              itemCount: _categoryMenus.length,
-                              itemBuilder: (context, index) {
-                                final menu = _categoryMenus[index];
-                                return MenuCard(menu: menu);
-                              },
-                            )
+                          itemCount: _categoryMenus.length,
+                          itemBuilder: (context, index) {
+                            final menu = _categoryMenus[index];
+                            return MenuCard(menu: menu);
+                          },
+                        ),
                 ],
               ),
             ),

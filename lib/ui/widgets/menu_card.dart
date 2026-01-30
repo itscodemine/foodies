@@ -13,9 +13,7 @@ class MenuCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => DetailMenuScreen(menu: menu),
-          ),
+          MaterialPageRoute(builder: (context) => DetailMenuScreen(menu: menu)),
         );
       },
       child: Card(
@@ -32,11 +30,8 @@ class MenuCard extends StatelessWidget {
                 top: Radius.circular(12.0),
               ),
               child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.network(
-                  menu.imageUrl,
-                  fit: BoxFit.cover,
-                ),
+                aspectRatio: 16 / 10,
+                child: Image.network(menu.imageUrl, fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -56,7 +51,10 @@ class MenuCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 4.0,
+              ),
               child: Row(
                 children: [
                   const Icon(Icons.star, color: Colors.amber, size: 16),
