@@ -1,0 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foodies/models/user_model.dart';
+
+class AuthServices {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<UserModel?> signUp(
+      {required String name, required String email, required String password}) async {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+
+      UserModel user = UserModel(
+        id: userCredential.user!.uid,
+        name: name,
+        email: email,
+        joinAt: DateTime.now(),
+      );
+
+      await _firestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set(user.toJson());
+
+      return user;
+    } catch (e) {
+      return null;
+    }
+  }
+}
