@@ -2,14 +2,14 @@ class UserModel {
   final String id;
   final String name;
   final String email;
-  final String? image;
+  final String? imageUrl;
   final DateTime joinAt;
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
-    this.image,
+    this.imageUrl,
     required this.joinAt,
   });
 
@@ -18,7 +18,7 @@ class UserModel {
       id: id,
       name: json['name'],
       email: json['email'],
-      image: json['image'],
+      imageUrl: json['image_url'],
       joinAt: DateTime.fromMillisecondsSinceEpoch(json['join_at']),
     );
   }
@@ -27,7 +27,7 @@ class UserModel {
     return {
       'name': name,
       'email': email,
-      'image': image,
+      'image_url': imageUrl,
       'join_at': joinAt.millisecondsSinceEpoch,
     };
   }
