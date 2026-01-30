@@ -91,7 +91,7 @@ class _SearchMenuScreenState extends State<SearchMenuScreen> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 0.8,
+                          childAspectRatio: 3 / 4,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                         ),

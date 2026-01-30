@@ -89,7 +89,6 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 100),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -147,12 +146,12 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
                   ),
                   if (_isLoadingReviews)
                     const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.symmetric(vertical: 20),
                       child: Center(child: CircularProgressIndicator()),
                     )
                   else if (_reviews.isEmpty)
                     const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.symmetric(vertical: 20),
                       child: Center(child: Text('No reviews yet.')),
                     )
                   else
