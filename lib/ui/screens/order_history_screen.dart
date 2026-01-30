@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/models/order_model.dart';
 import 'package:foodies/services/order_service.dart';
-import 'package:foodies/ui/screens/order_history_detail_screen.dart';
-import 'package:intl/intl.dart';
+import 'package:foodies/ui/widgets/order_history_card.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
@@ -35,35 +34,27 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order History'),
-        backgroundColor: Colors.green,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _orders.isEmpty
-              ? const Center(child: Text('You have no past orders.'))
+              ? const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.history, size: 80, color: Colors.grey),
+                      SizedBox(height: 20),
+                      Text('You have no past orders.',
+                          style: TextStyle(fontSize: 18, color: Colors.grey)),
+                    ],
+                  ),
+                )
               : ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   itemCount: _orders.length,
                   itemBuilder: (context, index) {
                     final order = _orders[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        title: Text('Order #${order.id}', overflow: TextOverflow.ellipsis,),
-                        subtitle: Text(DateFormat.yMMMd().format(order.createdAt.toDate())),
-                        trailing: Text(
-                          '\$${order.pricing.total.toStringAsFixed(2)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OrderHistoryDetailScreen(order: order),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                    return OrderHistoryCard(order: order);
                   },
                 ),
     );
