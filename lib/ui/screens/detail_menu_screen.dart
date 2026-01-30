@@ -175,7 +175,7 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -220,19 +220,15 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 16,
+                  horizontal: 16,
+                  vertical: 8,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text(
-                'Add to Cart',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
+              child: const Text('Add to Cart', style: TextStyle(fontSize: 16)),
             ),
           ],
         ),

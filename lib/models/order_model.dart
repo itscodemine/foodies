@@ -38,8 +38,7 @@ class OrderModel {
       payment: Payment.fromFirestore(data['payment']),
       orderType: data['order_type'],
       deliveryAddress: data['delivery_address'] != null
-          ? AddressModel.fromFirestore(
-              '', data['delivery_address']) // ID is not needed here
+          ? AddressModel.fromFirestore('', data['delivery_address'])
           : null,
     );
   }
@@ -135,14 +134,10 @@ class Payment {
   Payment({required this.method, required this.status});
 
   factory Payment.fromFirestore(Map<String, dynamic> data) {
-    return Payment(
-      method: data['method'],
-      status: data['status'],
-    );
+    return Payment(method: data['method'], status: data['status']);
   }
 
   Map<String, dynamic> toFirestore() {
     return {'method': method, 'status': status};
   }
 }
-

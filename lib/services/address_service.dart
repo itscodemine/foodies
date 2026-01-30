@@ -26,9 +26,7 @@ class AddressService {
   Future<void> addAddress(AddressModel address) async {
     try {
       await _firestore.collection('addresses').add(address.toFirestore());
-    } catch (e) {
-      //
-    }
+    } catch (e) {}
   }
 
   Future<void> updateAddress(AddressModel address) async {
@@ -37,16 +35,12 @@ class AddressService {
           .collection('addresses')
           .doc(address.id)
           .update(address.toFirestore());
-    } catch (e) {
-      //
-    }
+    } catch (e) {}
   }
 
   Future<void> deleteAddress(String addressId) async {
     try {
       await _firestore.collection('addresses').doc(addressId).delete();
-    } catch (e) {
-      //
-    }
+    } catch (e) {}
   }
 }

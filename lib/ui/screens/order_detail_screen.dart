@@ -272,8 +272,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             : ElevatedButton(
                 onPressed: _placeOrder,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -281,12 +280,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Checkout',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                    Text('Checkout', style: TextStyle(fontSize: 18)),
                     SizedBox(width: 10),
-                    Icon(Icons.check, color: Colors.white),
+                    Icon(Icons.check),
                   ],
                 ),
               ),

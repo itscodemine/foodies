@@ -8,8 +8,9 @@ class OrderService {
 
   Future<String?> createOrder(OrderModel order) async {
     try {
-      final docRef =
-          await _firestore.collection('orders').add(order.toFirestore());
+      final docRef = await _firestore
+          .collection('orders')
+          .add(order.toFirestore());
       CartService().clear();
       return docRef.id;
     } catch (e) {
@@ -31,7 +32,6 @@ class OrderService {
           .map((doc) => OrderModel.fromFirestore(doc.id, doc.data()))
           .toList();
     } catch (e) {
-      print(e); // For debugging
       return [];
     }
   }

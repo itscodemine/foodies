@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
 import 'package:foodies/services/menu_services.dart';
@@ -76,7 +75,7 @@ class _SearchMenuScreenState extends State<SearchMenuScreen> {
                     : null,
               ),
               onChanged: (value) {
-                setState(() {}); // To rebuild and show/hide the clear icon
+                setState(() {});
               },
             ),
           ),
@@ -84,24 +83,24 @@ class _SearchMenuScreenState extends State<SearchMenuScreen> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _hasSearched && _searchedMenus.isEmpty
-                    ? const Center(child: Text('No menus found for your search.'))
-                    : !_hasSearched
-                        ? const Center(child: Text('Start searching for menus...'))
-                        : GridView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.8,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: _searchedMenus.length,
-                            itemBuilder: (context, index) {
-                              final menu = _searchedMenus[index];
-                              return MenuCard(menu: menu);
-                            },
-                          ),
+                ? const Center(child: Text('No menus found for your search.'))
+                : !_hasSearched
+                ? const Center(child: Text('Start searching for menus...'))
+                : GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.8,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                    itemCount: _searchedMenus.length,
+                    itemBuilder: (context, index) {
+                      final menu = _searchedMenus[index];
+                      return MenuCard(menu: menu);
+                    },
+                  ),
           ),
         ],
       ),

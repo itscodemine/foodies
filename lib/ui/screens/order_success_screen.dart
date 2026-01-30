@@ -30,11 +30,7 @@ class OrderSuccessScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              child: const Text(
-                'Back to Home',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text('Back to Home'),
             ),
           ],
         ),

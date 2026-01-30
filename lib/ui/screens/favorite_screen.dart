@@ -41,41 +41,42 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteMenus.isEmpty
-              ? const Center(child: Text('You have no favorite menus yet.'))
-              : ListView.builder(
-                  itemCount: _favoriteMenus.length,
-                  itemBuilder: (context, index) {
-                    final menu = _favoriteMenus[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        leading: Image.network(
-                          menu.imageUrl,
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
+          ? const Center(child: Text('You have no favorite menus yet.'))
+          : ListView.builder(
+              itemCount: _favoriteMenus.length,
+              itemBuilder: (context, index) {
+                final menu = _favoriteMenus[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: ListTile(
+                    leading: Image.network(
+                      menu.imageUrl,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text(menu.name),
+                    subtitle: Text(
+                      '\$${menu.price.toStringAsFixed(2)}',
+                      style: TextStyle(color: Colors.green[800]),
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailMenuScreen(menu: menu),
                         ),
-                        title: Text(menu.name),
-                        subtitle: Text(
-                          '\$${menu.price.toStringAsFixed(2)}',
-                          style: TextStyle(color: Colors.green[800]),
-                        ),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailMenuScreen(menu: menu),
-                            ),
-                          );
-                          // Refresh favorites in case one was removed on the detail page
-                          _fetchFavorites();
-                        },
-                      ),
-                    );
-                  },
-                ),
+                      );
+                      _fetchFavorites();
+                    },
+                  ),
+                );
+              },
+            ),
     );
   }
 }

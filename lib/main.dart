@@ -19,6 +19,12 @@ class MyApp extends StatelessWidget {
       title: 'Foodies',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
+        ),
         useMaterial3: true,
       ),
       home: StreamBuilder<User?>(

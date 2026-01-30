@@ -87,8 +87,6 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     icon: const Icon(Icons.send),
                     label: const Text('Submit Review'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       textStyle: const TextStyle(
                         fontSize: 16,

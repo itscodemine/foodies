@@ -13,9 +13,7 @@ class OrderHistoryCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -36,16 +34,19 @@ class OrderHistoryCard extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      'Order #${order.id!.substring(0, 8)}', // Display first 8 chars of ID
+                      'Order #${order.id!.substring(0, 8)}',
                       style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Flexible(
                     child: Text(
-                      DateFormat('MMM d, yyyy HH:mm')
-                          .format(order.createdAt.toDate()),
+                      DateFormat(
+                        'MMM d, yyyy HH:mm',
+                      ).format(order.createdAt.toDate()),
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -56,16 +57,18 @@ class OrderHistoryCard extends StatelessWidget {
               Text(
                 'Total: \$${order.pricing.total.toStringAsFixed(2)}',
                 style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
               ),
               const SizedBox(height: 5),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(order.status).withAlpha((255 * 0.2).round()),
+                  color: _getStatusColor(
+                    order.status,
+                  ).withAlpha((255 * 0.2).round()),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(

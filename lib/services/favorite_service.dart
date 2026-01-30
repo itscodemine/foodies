@@ -29,7 +29,6 @@ class FavoriteService {
 
     try {
       if (isCurrentlyFavorite) {
-        // Find the favorite document to delete it
         final snapshot = await _firestore
             .collection('favorites')
             .where('user_id', isEqualTo: user.uid)
@@ -40,16 +39,13 @@ class FavoriteService {
           await snapshot.docs.first.reference.delete();
         }
       } else {
-        // Add a new favorite document
         await _firestore.collection('favorites').add({
           'user_id': user.uid,
           'menu_id': menuId,
           'favorited_at': Timestamp.now(),
         });
       }
-    } catch (e) {
-      //
-    }
+    } catch (e) {}
   }
 
   Future<List<MenuModel>> getFavoriteMenus() async {
@@ -57,7 +53,6 @@ class FavoriteService {
     if (user == null) return [];
 
     try {
-      // Get all of the user's favorite documents
       final favoriteSnapshot = await _firestore
           .collection('favorites')
           .where('user_id', isEqualTo: user.uid)
@@ -67,13 +62,12 @@ class FavoriteService {
         return [];
       }
 
-      // Extract the menu_id from each favorite document
-      final menuIds =
-          favoriteSnapshot.docs.map((doc) => doc['menu_id'] as String).toList();
-      
+      final menuIds = favoriteSnapshot.docs
+          .map((doc) => doc['menu_id'] as String)
+          .toList();
+
       if (menuIds.isEmpty) return [];
 
-      // Fetch all menus corresponding to the extracted menu_ids
       final menuQuerySnapshot = await _firestore
           .collection('menus')
           .where(FieldPath.documentId, whereIn: menuIds)
