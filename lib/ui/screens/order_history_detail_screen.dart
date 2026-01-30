@@ -267,10 +267,7 @@ class _OrderHistoryDetailScreenState extends State<OrderHistoryDetailScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              child: Text(
-                isReviewed ? 'REVIEWED' : 'REVIEW',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Text(isReviewed ? 'REVIEWED' : 'REVIEW'),
             ),
         ],
       ),
