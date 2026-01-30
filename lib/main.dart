@@ -25,9 +25,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+              body: Center(child: CircularProgressIndicator()),
             );
           } else if (snapshot.hasData) {
             return const HomeScreen();
@@ -36,6 +34,7 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

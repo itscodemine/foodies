@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
+import 'package:foodies/services/cart_service.dart';
 
 class DetailMenuScreen extends StatefulWidget {
   final MenuModel menu;
@@ -84,7 +85,15 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  CartService().add(widget.menu);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Added to cart'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   padding: const EdgeInsets.symmetric(vertical: 16),

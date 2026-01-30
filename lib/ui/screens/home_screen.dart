@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
 import 'package:foodies/services/auth_services.dart';
 import 'package:foodies/services/menu_services.dart';
+import 'package:foodies/ui/screens/cart_screen.dart';
 import 'package:foodies/ui/screens/detail_menu_screen.dart';
 import 'package:foodies/ui/screens/login_screen.dart';
 
@@ -36,6 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home'),
         backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartScreen()),
+              );
+            },
+            icon: const Icon(Icons.shopping_cart),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
