@@ -20,8 +20,7 @@ class ReviewService {
     final userImageUrl = userDoc.data()!['image_url'];
 
     final menuRef = _firestore.collection('menus').doc(menuId);
-    // Change: Use top-level collection for the new review
-    final reviewRef = _firestore.collection('menu_reviews').doc();
+    final reviewRef = _firestore.collection('reviews').doc();
 
     final review = ReviewModel(
       userId: user.uid,
@@ -42,13 +41,13 @@ class ReviewService {
         }
 
         final currentRatingCount = menuDoc.data()!['rating_count'] as int;
-        final currentAverageRating =
-            (menuDoc.data()!['average_rating'] as num).toDouble();
+        final currentAverageRating = (menuDoc.data()!['average_rating'] as num)
+            .toDouble();
 
         final newRatingCount = currentRatingCount + 1;
         final newAverageRating =
             ((currentAverageRating * currentRatingCount) + rating) /
-                newRatingCount;
+            newRatingCount;
 
         transaction.set(reviewRef, review.toFirestore());
         transaction.update(menuRef, {
@@ -69,9 +68,8 @@ class ReviewService {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return false;
 
-    // Change: Query the top-level collection
     final snapshot = await _firestore
-        .collection('menu_reviews')
+        .collection('reviews')
         .where('user_id', isEqualTo: user.uid)
         .where('order_id', isEqualTo: orderId)
         .where('menu_id', isEqualTo: menuId)
@@ -83,16 +81,16 @@ class ReviewService {
 
   Future<List<ReviewModel>> getReviewsForMenu(String menuId) async {
     try {
-      // Change: Query the top-level collection
       final snapshot = await _firestore
-          .collection('menu_reviews')
+          .collection('reviews')
           .where('menu_id', isEqualTo: menuId)
           .orderBy('created_at', descending: true)
           .get();
-      return snapshot.docs.map((doc) => ReviewModel.fromFirestore(doc)).toList();
+      return snapshot.docs
+          .map((doc) => ReviewModel.fromFirestore(doc))
+          .toList();
     } catch (e) {
       return [];
     }
   }
 }
-
