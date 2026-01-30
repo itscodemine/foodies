@@ -85,9 +85,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     if (user != null) {
-      // Navigate to home screen or show success message
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
     } else {
-      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registration failed. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }

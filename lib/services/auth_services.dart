@@ -29,4 +29,23 @@ class AuthServices {
       return null;
     }
   }
+
+  Future<UserModel?> signIn({required String email, required String password}) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return await getUser(userCredential.user!.uid);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<UserModel?> getUser(String id) async {
+    try {
+      DocumentSnapshot doc = await _firestore.collection('users').doc(id).get();
+      return UserModel.fromJson(id, doc.data() as Map<String, dynamic>);
+    } catch (e) {
+      return null;
+    }
+  }
 }
