@@ -22,4 +22,22 @@ class MenuServices {
       return [];
     }
   }
+
+  Future<List<MenuModel>> getMenusByCategory(String category) async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection('menus')
+          .where('category', isEqualTo: category)
+          .get();
+
+      List<MenuModel> menus = snapshot.docs.map((doc) {
+        return MenuModel.fromFirestore(
+            doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      return menus;
+    } catch (e) {
+      return [];
+    }
+  }
 }
