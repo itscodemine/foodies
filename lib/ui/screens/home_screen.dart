@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
 import 'package:foodies/services/auth_services.dart';
 import 'package:foodies/services/menu_services.dart';
+import 'package:foodies/ui/screens/address_screen.dart';
 import 'package:foodies/ui/screens/cart_screen.dart';
 import 'package:foodies/ui/screens/detail_menu_screen.dart';
 import 'package:foodies/ui/screens/login_screen.dart';
+import 'package:foodies/ui/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,7 +75,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('Profile'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: const Text('My Addresses'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddressScreen()),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.history),
