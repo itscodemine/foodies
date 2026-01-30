@@ -278,9 +278,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: const Text(
-                  'Place Order',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Checkout',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(Icons.check, color: Colors.white),
+                  ],
                 ),
               ),
       ),
