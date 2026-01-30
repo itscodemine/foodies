@@ -7,7 +7,6 @@ class MenuModel {
   final double price;
   final double averageRating;
   final int ratingCount;
-  final bool isAvailable;
 
   MenuModel({
     required this.id,
@@ -18,7 +17,6 @@ class MenuModel {
     required this.price,
     required this.averageRating,
     required this.ratingCount,
-    required this.isAvailable,
   });
 
   factory MenuModel.fromFirestore(String id, Map<String, dynamic> data) {
@@ -31,7 +29,6 @@ class MenuModel {
       price: (data['price'] as num).toDouble(),
       averageRating: (data['average_rating'] as num).toDouble(),
       ratingCount: data['rating_count'],
-      isAvailable: data['is_available'],
     );
   }
 }
