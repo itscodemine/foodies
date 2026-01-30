@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/services/cart_service.dart';
+import 'package:foodies/ui/screens/order_detail_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -71,9 +72,16 @@ class _CartScreenState extends State<CartScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // Navigate to checkout
-              },
+              onPressed: _cartService.items.isEmpty
+                  ? null
+                  : () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const OrderDetailScreen()),
+                      );
+                      _updateCart();
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 minimumSize: const Size(double.infinity, 50),
