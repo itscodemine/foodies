@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
+import 'package:foodies/models/user_model.dart';
 import 'package:foodies/services/auth_services.dart';
 import 'package:foodies/services/menu_services.dart';
 import 'package:foodies/ui/screens/address_screen.dart';
 import 'package:foodies/ui/screens/cart_screen.dart';
-import 'package:foodies/ui/screens/detail_menu_screen.dart';
 import 'package:foodies/ui/screens/favorite_screen.dart';
 import 'package:foodies/ui/screens/login_screen.dart';
 import 'package:foodies/ui/screens/order_history_screen.dart';
 import 'package:foodies/ui/screens/profile_screen.dart';
+import 'package:foodies/ui/widgets/menu_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  UserModel? _user;
   List<MenuModel> _popularMenus = [];
   bool _isLoading = true;
   final _categories = [
@@ -34,8 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _fetchUserData();
     _fetchPopularMenus();
     _fetchMenusByCategory(_selectedCategory);
+  }
+
+  Future<void> _fetchUserData() async {
+    final user =
+        await AuthServices().getUser(FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      _user = user;
+    });
   }
 
   Future<void> _fetchMenusByCategory(String category) async {
@@ -62,7 +74,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: _user != null
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Hello,',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    _user!.name,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )
+            : null,
+        elevation: 0,
         backgroundColor: Colors.green,
         actions: [
           IconButton(
@@ -80,20 +108,36 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: const BoxDecoration(
                 color: Colors.green,
               ),
-              child: Text(
-                'Foodies',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
+              child: _user != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, ${_user!.name}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          _user!.email,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    )
+                  : null,
             ),
             ListTile(
-              leading: const Icon(Icons.favorite),
+              leading: const Icon(Icons.favorite_border),
               title: const Text('Favorites'),
               onTap: () {
                 Navigator.push(
@@ -103,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
+              leading: const Icon(Icons.person_outline),
               title: const Text('Profile'),
               onTap: () {
                 Navigator.push(
@@ -113,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.location_on),
+              leading: const Icon(Icons.location_on_outlined),
               title: const Text('My Addresses'),
               onTap: () {
                 Navigator.push(
@@ -123,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.history),
+              leading: const Icon(Icons.history_outlined),
               title: const Text('Order History'),
               onTap: () {
                 Navigator.push(
@@ -134,12 +178,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.info),
+              leading: const Icon(Icons.info_outline),
               title: const Text('About Us'),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.logout),
+              leading: const Icon(Icons.logout_outlined),
               title: const Text('Logout'),
               onTap: () async {
                 await AuthServices().signOut();
@@ -156,16 +200,40 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search for menus...',
+                        prefixIcon: const Icon(Icons.search, color: Colors.green),
+                        fillColor: Colors.green[50],
+                        filled: true,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.green[100]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.green[700]!),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12.0),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       'Popular Menus',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 12.0),
@@ -179,65 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final menu = _popularMenus[index];
                         return SizedBox(
                           width: 160,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailMenuScreen(menu: menu),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AspectRatio(
-                                    aspectRatio: 16 / 9,
-                                    child: Image.network(
-                                      menu.imageUrl,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      menu.name,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Text(
-                                      '\$${menu.price.toStringAsFixed(2)}',
-                                      style:
-                                          TextStyle(color: Colors.green[800]),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 4.0),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.star,
-                                            color: Colors.amber, size: 16),
-                                        const SizedBox(width: 4),
-                                        Text(menu.averageRating
-                                            .toStringAsFixed(1)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          child: MenuCard(menu: menu),
                         );
                       },
                     ),
@@ -248,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       'Categories',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 12.0),
@@ -264,8 +274,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: ChoiceChip(
                             padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            label: Text(category),
+                            label: Text(
+                              category,
+                              style: TextStyle(
+                                color: _selectedCategory == category
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
                             selected: _selectedCategory == category,
+                            backgroundColor: Colors.green[100],
+                            selectedColor: Colors.green,
+                            showCheckmark: false,
+                            pressElevation: 0.0,
                             onSelected: (selected) {
                               if (selected) {
                                 _fetchMenusByCategory(category);
@@ -282,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       'Menus',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 12.0),
@@ -303,67 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemCount: _categoryMenus.length,
                               itemBuilder: (context, index) {
                                 final menu = _categoryMenus[index];
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailMenuScreen(menu: menu),
-                                      ),
-                                    );
-                                  },
-                                  child: Card(
-                                    margin: const EdgeInsets.all(4.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        AspectRatio(
-                                          aspectRatio: 16 / 9,
-                                          child: Image.network(
-                                            menu.imageUrl,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            menu.name,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            '\$${menu.price.toStringAsFixed(2)}',
-                                            style: TextStyle(
-                                                color: Colors.green[800]),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0,
-                                              vertical: 4.0),
-                                          child: Row(
-                                            children: [
-                                              const Icon(Icons.star,
-                                                  color: Colors.amber,
-                                                  size: 16),
-                                              const SizedBox(width: 4),
-                                              Text(menu.averageRating
-                                                  .toStringAsFixed(1)),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                return MenuCard(menu: menu);
                               },
                             )
                 ],
