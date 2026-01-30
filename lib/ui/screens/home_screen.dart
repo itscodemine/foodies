@@ -78,20 +78,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Hello,',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                   Text(
                     _user!.name,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ],
               )
             : null,
         elevation: 0,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
         actions: [
           IconButton(
             onPressed: () {
@@ -105,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: Drawer(
+        backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -137,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   : null,
             ),
             ListTile(
-              leading: const Icon(Icons.favorite_border),
-              title: const Text('Favorites'),
+              leading: const Icon(Icons.favorite_border, color: Colors.black),
+              title: const Text('Favorites', style: TextStyle(color: Colors.black)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -147,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person_outline),
-              title: const Text('Profile'),
+              leading: const Icon(Icons.person_outline, color: Colors.black),
+              title: const Text('Profile', style: TextStyle(color: Colors.black)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -157,8 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.location_on_outlined),
-              title: const Text('My Addresses'),
+              leading: const Icon(Icons.location_on_outlined, color: Colors.black),
+              title: const Text('My Addresses', style: TextStyle(color: Colors.black)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -167,8 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.history_outlined),
-              title: const Text('Order History'),
+              leading: const Icon(Icons.history_outlined, color: Colors.black),
+              title: const Text('Order History', style: TextStyle(color: Colors.black)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -178,13 +182,13 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: const Text('About Us'),
+              leading: const Icon(Icons.info_outline, color: Colors.black),
+              title: const Text('About Us', style: TextStyle(color: Colors.black)),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.logout_outlined),
-              title: const Text('Logout'),
+              leading: const Icon(Icons.logout_outlined, color: Colors.black),
+              title: const Text('Logout', style: TextStyle(color: Colors.black)),
               onTap: () async {
                 await AuthServices().signOut();
                 Navigator.pushAndRemoveUntil(

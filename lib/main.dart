@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Foodies',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        useMaterial3: true,
       ),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
