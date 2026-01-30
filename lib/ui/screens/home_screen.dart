@@ -10,6 +10,7 @@ import 'package:foodies/ui/screens/favorite_screen.dart';
 import 'package:foodies/ui/screens/login_screen.dart';
 import 'package:foodies/ui/screens/order_history_screen.dart';
 import 'package:foodies/ui/screens/profile_screen.dart';
+import 'package:foodies/ui/screens/search_menu_screen.dart';
 import 'package:foodies/ui/widgets/menu_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -210,23 +211,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search for menus...',
-                        prefixIcon: const Icon(Icons.search, color: Colors.green),
-                        fillColor: Colors.green[50],
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: Colors.green[100]!),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: Colors.green[700]!),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchMenuScreen(),
+                          ),
+                        );
+                      },
+                      child: TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          hintText: 'Search for menus...',
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.green),
+                          fillColor: Colors.green[50],
+                          filled: true,
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 0),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(color: Colors.green[100]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(color: Colors.green[700]!),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
                       ),
                     ),

@@ -40,4 +40,23 @@ class MenuServices {
       return [];
     }
   }
+
+  Future<List<MenuModel>> searchMenus(String query) async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection('menus')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThan: '${query}z')
+          .get();
+
+      List<MenuModel> menus = snapshot.docs.map((doc) {
+        return MenuModel.fromFirestore(
+            doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      return menus;
+    } catch (e) {
+      return [];
+    }
+  }
 }
