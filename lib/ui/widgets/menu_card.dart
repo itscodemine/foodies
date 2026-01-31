@@ -17,7 +17,7 @@ class MenuCard extends StatelessWidget {
         );
       },
       child: Card(
-        margin: const EdgeInsets.all(4.0),
+        margin: const EdgeInsets.all(8.0),
         elevation: 2.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

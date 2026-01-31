@@ -276,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: 16.0),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: 6.0),
                   SizedBox(
                     height: 180,
                     child: ListView.builder(
@@ -364,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                childAspectRatio: 0.8,
+                                childAspectRatio: 3 / 4,
                               ),
                           itemCount: _categoryMenus.length,
                           itemBuilder: (context, index) {
