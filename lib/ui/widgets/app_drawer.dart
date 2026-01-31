@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/models/user_model.dart';
 import 'package:foodies/services/auth_services.dart';
+import 'package:foodies/ui/screens/about_screen.dart';
 import 'package:foodies/ui/screens/address_screen.dart';
 import 'package:foodies/ui/screens/favorite_screen.dart';
 import 'package:foodies/ui/screens/login_screen.dart';
@@ -122,7 +123,14 @@ class AppDrawer extends StatelessWidget {
                 'About Us',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AboutScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout_outlined, color: Colors.black),

@@ -68,7 +68,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Navigator.of(context).pop();
         }
       } catch (e) {
-        // Handle error
       } finally {
         setState(() {
           _isLoading = false;
@@ -140,11 +139,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ElevatedButton(
                       onPressed: _updateProfile,
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
-                          vertical: 15,
+                          horizontal: 16,
+                          vertical: 8,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
