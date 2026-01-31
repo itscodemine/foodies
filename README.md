@@ -68,7 +68,7 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
 
 ![demo](./previews/demo.mp4)
 
-<video src="previews/demo.mp4" controls="controls" muted="muted" width="100%">
+<video src="./previews/demo.mp4" controls="controls" muted="muted" width="100%">
 </video>
 
 ---
