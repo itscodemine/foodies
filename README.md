@@ -66,9 +66,9 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
 
 ## Preview
 
-![demo](./previews/demo.mp4)
+![demo](https://drive.google.com/file/d/1K-mniNZ_RP1eygFXBSHXngP2orrR6mnw/view?usp=sharing)
 
-<video src="./previews/demo.mp4" controls="controls" muted="muted" width="100%">
+<video src="https://drive.google.com/file/d/1K-mniNZ_RP1eygFXBSHXngP2orrR6mnw/view?usp=sharing" controls="controls" muted="muted" width="100%">
 </video>
 
 ---
