@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/models/menu_model.dart';
 import 'package:foodies/services/favorite_service.dart';
-import 'package:foodies/ui/screens/detail_menu_screen.dart';
+import 'package:foodies/ui/widgets/favorite_menu_item.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -21,7 +21,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     _fetchFavorites();
   }
 
-  void _fetchFavorites() async {
+  Future<void> _fetchFavorites() async {
     final menus = await _favoriteService.getFavoriteMenus();
     if (mounted) {
       setState(() {
@@ -31,52 +31,41 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     }
   }
 
+  Future<void> _removeFromFavorites(String menuId) async {
+    await _favoriteService.removeFavorite(menuId);
+    _fetchFavorites();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Favorites'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteMenus.isEmpty
-          ? const Center(child: Text('You have no favorite menus yet.'))
-          : ListView.builder(
-              itemCount: _favoriteMenus.length,
-              itemBuilder: (context, index) {
-                final menu = _favoriteMenus[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+              ? const Center(
+                  child: Text(
+                    'You have no favorite menus yet.',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                  child: ListTile(
-                    leading: Image.network(
-                      menu.imageUrl,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-                    title: Text(menu.name),
-                    subtitle: Text(
-                      '\$${menu.price.toStringAsFixed(2)}',
-                      style: TextStyle(color: Colors.green[800]),
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailMenuScreen(menu: menu),
-                        ),
-                      );
-                      _fetchFavorites();
-                    },
-                  ),
-                );
-              },
-            ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: _favoriteMenus.length,
+                  itemBuilder: (context, index) {
+                    final menu = _favoriteMenus[index];
+                    return FavoriteMenuItem(
+                      menu: menu,
+                      onRemove: () => _removeFromFavorites(menu.id),
+                    );
+                  },
+                ),
     );
   }
 }

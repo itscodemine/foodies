@@ -48,6 +48,23 @@ class FavoriteService {
     } catch (e) {}
   }
 
+  Future<void> removeFavorite(String menuId) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    try {
+      final snapshot = await _firestore
+          .collection('favorites')
+          .where('user_id', isEqualTo: user.uid)
+          .where('menu_id', isEqualTo: menuId)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
+      }
+    } catch (e) {}
+  }
+
   Future<List<MenuModel>> getFavoriteMenus() async {
     final user = _auth.currentUser;
     if (user == null) return [];

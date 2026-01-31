@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 60),
                     Stack(
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
