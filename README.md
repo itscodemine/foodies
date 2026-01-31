@@ -66,7 +66,10 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
 
 ## Preview
 
-[demo](./previews/demo.webm)
+![demo](./previews/demo.mp4)
+
+<video src="previews/demo.mp4" controls="controls" muted="muted" width="100%">
+</video>
 
 ---
 Dibuat dengan ❤️ untuk para pecinta kuliner.
