@@ -3,14 +3,14 @@ class UserModel {
   final String name;
   final String email;
   final String? imageUrl;
-  final DateTime joinAt;
+  final DateTime? joinAt;
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
     this.imageUrl,
-    required this.joinAt,
+    this.joinAt,
   });
 
   factory UserModel.fromJson(String id, Map<String, dynamic> json) {
@@ -19,16 +19,19 @@ class UserModel {
       name: json['name'],
       email: json['email'],
       imageUrl: json['image_url'],
-      joinAt: DateTime.fromMillisecondsSinceEpoch(json['join_at']),
+      joinAt: json['join_at'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(json['join_at'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'email': email,
       'image_url': imageUrl,
-      'join_at': joinAt.millisecondsSinceEpoch,
+      'join_at': joinAt?.millisecondsSinceEpoch,
     };
   }
 }

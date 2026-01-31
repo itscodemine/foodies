@@ -52,4 +52,12 @@ class AuthServices {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  Future<void> updateUser(UserModel user) async {
+    try {
+      await _firestore.collection('users').doc(user.id).update(user.toJson());
+    } catch (e) {
+      throw Exception('Error updating user: $e');
+    }
+  }
 }
