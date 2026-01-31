@@ -66,10 +66,7 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
 
 ## Preview
 
-![demo](https://drive.google.com/file/d/1K-mniNZ_RP1eygFXBSHXngP2orrR6mnw/view?usp=sharing)
-
-<video src="https://drive.google.com/file/d/1K-mniNZ_RP1eygFXBSHXngP2orrR6mnw/view?usp=sharing" controls="controls" muted="muted" width="100%">
-</video>
+Link Video: [demo.mp4](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)
 
 ---
 Dibuat dengan ❤️ untuk para pecinta kuliner.
