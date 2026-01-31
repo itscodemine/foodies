@@ -66,7 +66,24 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
 
 ## Preview
 
-![Previews](previews/1.png)
+![Preview 1](previews/1.png)
+![Preview 2](previews/2.png)
+![Preview 3](previews/3.png)
+![Preview 4](previews/4.png)
+![Preview 5](previews/5.png)
+![Preview 6](previews/6.png)
+![Preview 7](previews/7.png)
+![Preview 8](previews/8.png)
+![Preview 9](previews/9.png)
+![Preview 10](previews/10.png)
+![Preview 11](previews/11.png)
+![Preview 12](previews/12.png)
+![Preview 13](previews/13.png)
+![Preview 14](previews/14.png)
+![Preview 15](previews/15.png)
+![Preview 16](previews/16.png)
+![Preview 17](previews/17.png)
+![Preview 18](previews/18.png)
 
 ---
 Dibuat dengan ❤️ untuk para pecinta kuliner.
