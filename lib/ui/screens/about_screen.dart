@@ -116,6 +116,8 @@ class _AboutScreenState extends State<AboutScreen>
                               ),
                             ],
                           ),
+                          SizedBox(height: 16),
+                          Text('2026 © Copyright by Tatang'),
                         ],
                       ),
                     ),
