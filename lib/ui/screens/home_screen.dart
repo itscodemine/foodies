@@ -11,6 +11,7 @@ import 'package:foodies/ui/screens/login_screen.dart';
 import 'package:foodies/ui/screens/order_history_screen.dart';
 import 'package:foodies/ui/screens/profile_screen.dart';
 import 'package:foodies/ui/screens/search_menu_screen.dart';
+import 'package:foodies/ui/widgets/app_drawer.dart';
 import 'package:foodies/ui/widgets/menu_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -110,126 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: const BoxDecoration(color: Colors.green),
-              child: _user != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hello, ${_user!.name}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          _user!.email,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    )
-                  : null,
-            ),
-            ListTile(
-              leading: const Icon(Icons.favorite_border, color: Colors.black),
-              title: const Text(
-                'Favorites',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FavoriteScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person_outline, color: Colors.black),
-              title: const Text(
-                'Profile',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.location_on_outlined,
-                color: Colors.black,
-              ),
-              title: const Text(
-                'My Addresses',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddressScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.history_outlined, color: Colors.black),
-              title: const Text(
-                'Order History',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OrderHistoryScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.info_outline, color: Colors.black),
-              title: const Text(
-                'About Us',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout_outlined, color: Colors.black),
-              title: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () async {
-                await AuthServices().signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: AppDrawer(user: _user),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
