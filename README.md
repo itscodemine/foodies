@@ -66,7 +66,7 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
 
 ## Preview
 
-Link Video: [demo.mp4](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)
+![Previews](previews/1.png)
 
 ---
 Dibuat dengan ❤️ untuk para pecinta kuliner.
