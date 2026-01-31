@@ -63,5 +63,10 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah ber
     flutter run
     ```
 
+
+## Preview
+
+[demo](./previews/demo.webm)
+
 ---
 Dibuat dengan ❤️ untuk para pecinta kuliner.
